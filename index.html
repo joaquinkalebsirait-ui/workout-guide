@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>IronForge — Panduan Workout</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;0,700;1,300&family=Barlow+Condensed:wght@400;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --navy: #0a0f1e;
+      --navy-2: #0d1530;
+      --navy-3: #111d3c;
+      --blue-mid: #1a3a6e;
+      --blue-bright: #1e6fff;
+      --blue-electric: #00c2ff;
+      --blue-glow: #00eaff;
+      --accent: #ff6a00;
+      --text-primary: #e8f4ff;
+      --text-secondary: #8ab4d4;
+      --text-muted: #4a6a8a;
+      --card-bg: rgba(14, 30, 65, 0.7);
+      --sidebar-w: 280px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--text-primary);
+      font-family: 'Barlow', sans-serif;
+      font-weight: 400;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* === ANIMATED BG === */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 20% 0%, rgba(30,111,255,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse 60% 50% at 85% 90%, rgba(0,194,255,0.12) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 30% at 50% 50%, rgba(0,234,255,0.04) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Grid lines */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(30,111,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(30,111,255,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* === HEADER === */
+    header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: 64px;
+      background: rgba(10,15,30,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(30,111,255,0.2);
+      display: flex;
+      align-items: center;
+      padding: 0 24px;
+      z-index: 100;
+      gap: 16px;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 4px;
+      background: linear-gradient(90deg, var(--blue-bright), var(--blue-electric));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      flex-shrink: 0;
+    }
+
+    .logo span {
+      background: linear-gradient(90deg, var(--blue-glow), #fff);
+      -webkit-background-clip: text;
+      background-clip: text;
+    }
+
+    .header-tagline {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      border-left: 1px solid rgba(30,111,255,0.3);
+      padding-left: 16px;
+    }
+
+    .header-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-badge {
+      background: linear-gradient(135deg, var(--blue-bright), var(--blue-electric));
+      color: #fff;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      padding: 4px 12px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      padding: 4px;
+      background: none;
+      border: none;
+    }
+    .hamburger span {
+      width: 24px;
+      height: 2px;
+      background: var(--blue-electric);
+      border-radius: 2px;
+      transition: all 0.3s;
+      display: block;
+    }
+
+    /* === LAYOUT === */
+    .app {
+      display: flex;
+      margin-top: 64px;
+      min-height: calc(100vh - 64px);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* === SIDEBAR === */
+    .sidebar {
+      width: var(--sidebar-w);
+      flex-shrink: 0;
+      background: rgba(9, 14, 30, 0.95);
+      border-right: 1px solid rgba(30,111,255,0.15);
+      position: fixed;
+      top: 64px;
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      z-index: 50;
+      padding: 24px 0 40px;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-track { background: transparent; }
+    .sidebar::-webkit-scrollbar-thumb { background: rgba(30,111,255,0.3); border-radius: 4px; }
+
+    .sidebar-section-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 10px;
+      letter-spacing: 3px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      padding: 0 20px 10px;
+      border-bottom: 1px solid rgba(30,111,255,0.1);
+      margin-bottom: 8px;
+    }
+
+    .sidebar-section-label:not(:first-child) { margin-top: 24px; }
+
+    .muscle-btn {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 11px 20px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-secondary);
+      font-family: 'Barlow', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: left;
+      border-left: 3px solid transparent;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .muscle-btn:hover {
+      background: rgba(30,111,255,0.08);
+      color: var(--blue-electric);
+      border-left-color: rgba(30,111,255,0.4);
+    }
+
+    .muscle-btn.active {
+      background: linear-gradient(90deg, rgba(30,111,255,0.18), transparent);
+      color: #fff;
+      border-left-color: var(--blue-electric);
+    }
+
+    .muscle-btn.active .btn-icon { color: var(--blue-glow); }
+
+    .btn-icon {
+      font-size: 20px;
+      width: 28px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .btn-label { flex: 1; }
+
+    .btn-badge {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 10px;
+      letter-spacing: 1px;
+      background: rgba(30,111,255,0.2);
+      color: var(--blue-electric);
+      padding: 2px 6px;
+      border-radius: 2px;
+    }
+
+    .muscle-btn.active .btn-badge {
+      background: var(--blue-bright);
+      color: #fff;
+    }
+
+    /* Body diagram */
+    .body-diagram-wrap {
+      padding: 16px 20px 8px;
+      text-align: center;
+    }
+
+    .body-diagram {
+      width: 100%;
+      max-width: 180px;
+      opacity: 0.7;
+      filter: drop-shadow(0 0 16px rgba(0,194,255,0.3));
+    }
+
+    /* === MAIN CONTENT === */
+    main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 40px 48px;
+      max-width: 100%;
+    }
+
+    /* === HERO PANEL === */
+    .hero-panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid rgba(30,111,255,0.25);
+      background: linear-gradient(135deg, var(--navy-3) 0%, rgba(10,25,60,0.9) 100%);
+      padding: 48px 48px 48px;
+      margin-bottom: 32px;
+    }
+
+    .hero-panel::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(0,194,255,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-panel::after {
+      content: attr(data-muscle);
+      position: absolute;
+      right: 32px; bottom: -10px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 120px;
+      letter-spacing: 6px;
+      color: rgba(30,111,255,0.07);
+      line-height: 1;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    .muscle-category {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--blue-electric);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .muscle-category::before {
+      content: '';
+      display: inline-block;
+      width: 32px;
+      height: 2px;
+      background: var(--blue-electric);
+    }
+
+    .hero-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 6vw, 80px);
+      letter-spacing: 4px;
+      line-height: 1;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+
+    .hero-title span {
+      background: linear-gradient(90deg, var(--blue-bright), var(--blue-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 15px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 600px;
+    }
+
+    .hero-stats {
+      display: flex;
+      gap: 32px;
+      margin-top: 32px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item { text-align: center; }
+
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      letter-spacing: 2px;
+      background: linear-gradient(180deg, #fff, var(--blue-electric));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1;
+    }
+
+    .stat-label {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .stat-divider {
+      width: 1px;
+      background: rgba(30,111,255,0.2);
+      align-self: stretch;
+    }
+
+    /* === EXERCISE GRID === */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(30,111,255,0.3), transparent);
+    }
+
+    .exercises-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .exercise-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(30,111,255,0.15);
+      border-radius: 6px;
+      padding: 22px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
+
+    .exercise-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 3px; height: 100%;
+      background: linear-gradient(180deg, var(--blue-bright), var(--blue-electric));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .exercise-card:hover {
+      border-color: rgba(30,111,255,0.4);
+      background: rgba(14,30,70,0.8);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,100,255,0.12);
+    }
+
+    .exercise-card:hover::before { opacity: 1; }
+
+    .card-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 48px;
+      color: rgba(30,111,255,0.1);
+      position: absolute;
+      top: 12px; right: 16px;
+      line-height: 1;
+      transition: color 0.3s;
+    }
+
+    .exercise-card:hover .card-num { color: rgba(0,194,255,0.15); }
+
+    .card-difficulty {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .diff-beginner { color: #00e676; }
+    .diff-intermediate { color: #ffb300; }
+    .diff-advanced { color: #ff3d00; }
+
+    .diff-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      box-shadow: 0 0 6px currentColor;
+    }
+
+    .card-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .card-desc {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .tag {
+      background: rgba(30,111,255,0.12);
+      border: 1px solid rgba(30,111,255,0.2);
+      color: var(--blue-electric);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    /* === TIPS SECTION === */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .tip-card {
+      background: rgba(9,20,50,0.6);
+      border: 1px solid rgba(30,111,255,0.12);
+      border-radius: 6px;
+      padding: 18px;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .tip-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .tip-content {}
+
+    .tip-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      color: var(--blue-electric);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+    }
+
+    .tip-text {
+      font-size: 13px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* === WORKOUT PLAN === */
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 32px;
+    }
+
+    .plan-table th {
+      background: rgba(30,111,255,0.12);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--blue-electric);
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid rgba(30,111,255,0.2);
+    }
+
+    .plan-table td {
+      padding: 12px 16px;
+      font-size: 14px;
+      color: var(--text-secondary);
+      border-bottom: 1px solid rgba(30,111,255,0.07);
+    }
+
+    .plan-table tr:last-child td { border-bottom: none; }
+
+    .plan-table tr:hover td {
+      background: rgba(30,111,255,0.04);
+      color: var(--text-primary);
+    }
+
+    .sets-reps {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-weight: 600;
+      color: var(--blue-glow);
+      font-size: 15px;
+    }
+
+    .rest-badge {
+      background: rgba(255,106,0,0.1);
+      color: #ff6a00;
+      border: 1px solid rgba(255,106,0,0.2);
+      padding: 2px 8px;
+      border-radius: 2px;
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 12px;
+    }
+
+    /* === WELCOME SCREEN === */
+    .welcome-screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .welcome-icon {
+      font-size: 80px;
+      margin-bottom: 24px;
+      filter: drop-shadow(0 0 32px rgba(0,194,255,0.5));
+      animation: pulse-icon 3s ease-in-out infinite;
+    }
+
+    @keyframes pulse-icon {
+      0%, 100% { transform: scale(1); filter: drop-shadow(0 0 32px rgba(0,194,255,0.5)); }
+      50% { transform: scale(1.05); filter: drop-shadow(0 0 48px rgba(0,234,255,0.7)); }
+    }
+
+    .welcome-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 56px;
+      letter-spacing: 6px;
+      background: linear-gradient(90deg, var(--blue-bright), var(--blue-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 12px;
+    }
+
+    .welcome-sub {
+      font-size: 16px;
+      font-weight: 300;
+      color: var(--text-secondary);
+      max-width: 420px;
+      line-height: 1.7;
+      margin-bottom: 32px;
+    }
+
+    .muscle-quick-btns {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      max-width: 500px;
+    }
+
+    .quick-btn {
+      background: rgba(30,111,255,0.1);
+      border: 1px solid rgba(30,111,255,0.25);
+      color: var(--text-secondary);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 8px 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .quick-btn:hover {
+      background: rgba(30,111,255,0.25);
+      color: var(--blue-electric);
+      border-color: var(--blue-electric);
+      transform: translateY(-1px);
+    }
+
+    /* === PROGRESS BAR === */
+    .progress-section {
+      background: var(--card-bg);
+      border: 1px solid rgba(30,111,255,0.15);
+      border-radius: 6px;
+      padding: 24px;
+      margin-bottom: 32px;
+    }
+
+    .progress-title {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 14px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .muscle-groups-progress {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .prog-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .prog-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      width: 100px;
+      flex-shrink: 0;
+    }
+
+    .prog-bar {
+      flex: 1;
+      height: 4px;
+      background: rgba(30,111,255,0.12);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .prog-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--blue-bright), var(--blue-electric));
+      box-shadow: 0 0 8px rgba(0,194,255,0.4);
+      transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .prog-pct {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 13px;
+      color: var(--blue-electric);
+      width: 36px;
+      text-align: right;
+    }
+
+    /* === OVERLAY (mobile) === */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 64px 0 0 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 40;
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 900px) {
+      :root { --sidebar-w: 260px; }
+      main { padding: 24px; }
+      .hero-panel { padding: 32px 24px; }
+      .hero-panel::after { display: none; }
+    }
+
+    @media (max-width: 700px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      .sidebar-overlay.show { display: block; }
+      main { margin-left: 0; padding: 20px 16px; }
+      .hamburger { display: flex; }
+      .header-tagline { display: none; }
+      .exercises-grid { grid-template-columns: 1fr; }
+      .tips-grid { grid-template-columns: 1fr; }
+      .hero-stats { gap: 20px; }
+    }
+
+    /* Fade-in animation */
+    .content-panel {
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <div class="logo">Iron<span>Forge</span></div>
+  <div class="header-tagline">Panduan Workout Profesional</div>
+  <div class="header-right">
+    <div class="header-badge">Pro Guide</div>
+  </div>
+</header>
+
+<div class="sidebar-overlay" id="overlay"></div>
+
+<!-- APP WRAPPER -->
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="body-diagram-wrap">
+      <!-- Simple SVG body silhouette -->
+      <svg class="body-diagram" viewBox="0 0 100 220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e6fff" stop-opacity="0.6"/>
+            <stop offset="100%" stop-color="#00c2ff" stop-opacity="0.3"/>
+          </linearGradient>
+        </defs>
+        <!-- Head -->
+        <circle cx="50" cy="18" r="13" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="1"/>
+        <!-- Neck -->
+        <rect x="44" y="30" width="12" height="10" rx="3" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="0.5"/>
+        <!-- Torso -->
+        <path d="M28 42 Q50 38 72 42 L76 100 Q50 104 24 100 Z" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="1"/>
+        <!-- Left Arm -->
+        <path d="M28 44 L14 58 L10 90 L16 92 L20 64 L32 52 Z" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="0.8"/>
+        <!-- Right Arm -->
+        <path d="M72 44 L86 58 L90 90 L84 92 L80 64 L68 52 Z" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="0.8"/>
+        <!-- Left Forearm -->
+        <path d="M10 90 L8 118 L14 120 L16 92 Z" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="0.8"/>
+        <!-- Right Forearm -->
+        <path d="M90 90 L92 118 L86 120 L84 92 Z" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="0.8"/>
+        <!-- Left Leg -->
+        <path d="M36 100 L30 152 L38 154 L44 110 L50 108 Z" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="0.8"/>
+        <!-- Right Leg -->
+        <path d="M64 100 L70 152 L62 154 L56 110 L50 108 Z" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="0.8"/>
+        <!-- Left Lower Leg -->
+        <path d="M30 152 L28 190 L36 192 L38 154 Z" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="0.8"/>
+        <!-- Right Lower Leg -->
+        <path d="M70 152 L72 190 L64 192 L62 154 Z" fill="url(#bodyGrad)" stroke="#1e6fff" stroke-width="0.8"/>
+        <!-- Glow lines -->
+        <line x1="50" y1="42" x2="50" y2="100" stroke="#00eaff" stroke-width="0.5" stroke-dasharray="3,3" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <div class="sidebar-section-label">Upper Body</div>
+    <button class="muscle-btn" onclick="showMuscle('chest')">
+      <span class="btn-icon">🫀</span>
+      <span class="btn-label">Dada (Chest)</span>
+      <span class="btn-badge">8 Latihan</span>
+    </button>
+    <button class="muscle-btn" onclick="showMuscle('back')">
+      <span class="btn-icon">🏋️</span>
+      <span class="btn-label">Punggung (Back)</span>
+      <span class="btn-badge">10 Latihan</span>
+    </button>
+    <button class="muscle-btn" onclick="showMuscle('shoulder')">
+      <span class="btn-icon">💪</span>
+      <span class="btn-label">Bahu (Shoulder)</span>
+      <span class="btn-badge">7 Latihan</span>
+    </button>
+    <button class="muscle-btn" onclick="showMuscle('bicep')">
+      <span class="btn-icon">🦾</span>
+      <span class="btn-label">Bisep (Biceps)</span>
+      <span class="btn-badge">6 Latihan</span>
+    </button>
+    <button class="muscle-btn" onclick="showMuscle('tricep')">
+      <span class="btn-icon">🔱</span>
+      <span class="btn-label">Trisep (Triceps)</span>
+      <span class="btn-badge">6 Latihan</span>
+    </button>
+
+    <div class="sidebar-section-label">Core & Lower Body</div>
+    <button class="muscle-btn" onclick="showMuscle('abs')">
+      <span class="btn-icon">⚡</span>
+      <span class="btn-label">Perut (Abs)</span>
+      <span class="btn-badge">9 Latihan</span>
+    </button>
+    <button class="muscle-btn" onclick="showMuscle('leg')">
+      <span class="btn-icon">🦵</span>
+      <span class="btn-label">Kaki (Legs)</span>
+      <span class="btn-badge">8 Latihan</span>
+    </button>
+    <button class="muscle-btn" onclick="showMuscle('glute')">
+      <span class="btn-icon">🍑</span>
+      <span class="btn-label">Glute & Hamstring</span>
+      <span class="btn-badge">6 Latihan</span>
+    </button>
+    <button class="muscle-btn" onclick="showMuscle('calf')">
+      <span class="btn-icon">🏃</span>
+      <span class="btn-label">Betis (Calves)</span>
+      <span class="btn-badge">5 Latihan</span>
+    </button>
+
+    <div class="sidebar-section-label">Cardio & Full Body</div>
+    <button class="muscle-btn" onclick="showMuscle('cardio')">
+      <span class="btn-icon">❤️</span>
+      <span class="btn-label">Kardio (Cardio)</span>
+      <span class="btn-badge">7 Latihan</span>
+    </button>
+    <button class="muscle-btn" onclick="showMuscle('fullbody')">
+      <span class="btn-icon">🔥</span>
+      <span class="btn-label">Full Body</span>
+      <span class="btn-badge">5 Latihan</span>
+    </button>
+  </aside>
+
+  <!-- MAIN -->
+  <main id="main-content">
+    <div id="content-area">
+      <!-- WELCOME -->
+      <div class="welcome-screen">
+        <div class="welcome-icon">🏋️</div>
+        <div class="welcome-title">SELAMAT DATANG</div>
+        <p class="welcome-sub">Pilih bagian otot yang ingin kamu latih dari sidebar, dan dapatkan panduan latihan lengkap yang dipersonalisasi.</p>
+        <div class="muscle-quick-btns">
+          <button class="quick-btn" onclick="showMuscle('chest')">💪 Dada</button>
+          <button class="quick-btn" onclick="showMuscle('back')">🏋️ Punggung</button>
+          <button class="quick-btn" onclick="showMuscle('abs')">⚡ Perut</button>
+          <button class="quick-btn" onclick="showMuscle('leg')">🦵 Kaki</button>
+          <button class="quick-btn" onclick="showMuscle('shoulder')">💪 Bahu</button>
+          <button class="quick-btn" onclick="showMuscle('bicep')">🦾 Bisep</button>
+          <button class="quick-btn" onclick="showMuscle('cardio')">❤️ Kardio</button>
+          <button class="quick-btn" onclick="showMuscle('fullbody')">🔥 Full Body</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const muscleData = {
+  chest: {
+    name: "DADA",
+    subtitle: "Chest / Pectoralis Major",
+    category: "Upper Body",
+    icon: "🫀",
+    description: "Otot dada (pectoralis major) adalah otot besar yang membentang di bagian depan dada. Latihan dada yang tepat memberikan daya dorong yang kuat, membentuk postur tubuh yang baik, dan menciptakan penampilan torso yang proporsional.",
+    sets: 12, exercises: 8, rest: "60-90 dtk",
+    exercises: [
+      { name: "Bench Press (Flat)", diff: "beginner", desc: "Gerakan dasar untuk membangun massa otot dada secara keseluruhan. Berbaring di bangku datar, turunkan barbel ke dada dan dorong ke atas.", tags: ["Barbel", "Compound", "Utama"] },
+      { name: "Incline Dumbbell Press", diff: "intermediate", desc: "Menarget bagian atas dada (upper chest). Bangku dinaikkan 30–45°, gunakan dumbbell untuk range of motion yang lebih luas.", tags: ["Dumbbell", "Upper Chest", "Compound"] },
+      { name: "Decline Bench Press", diff: "intermediate", desc: "Menyasar bagian bawah dada. Bangku diturunkan ke posisi miring, memberikan stimulasi berbeda pada serat otot bawah.", tags: ["Barbel", "Lower Chest", "Compound"] },
+      { name: "Push-Up (Variasi)", diff: "beginner", desc: "Latihan bodyweight klasik. Variasikan sudut tangan dan lebar pegangan untuk menarget berbeda bagian dada. Tidak butuh alat!", tags: ["Bodyweight", "No Gym", "Kardio"] },
+      { name: "Cable Flyes", diff: "intermediate", desc: "Gerakan isolasi terbaik untuk dada. Kabel memberikan konstan tension sepanjang gerakan, memaksimalkan stretch dan kontraksi otot.", tags: ["Kabel", "Isolasi", "Stretch"] },
+      { name: "Dumbbell Flyes", diff: "beginner", desc: "Membuka dada dengan gerakan melebar. Fokus pada kontraksi penuh di puncak gerakan untuk hasil maksimal.", tags: ["Dumbbell", "Isolasi", "Stretch"] },
+    ],
+    tips: [
+      { icon: "🎯", title: "Posisi Bahu", text: "Selalu retraksi (tarik ke belakang) bahu saat bench press untuk melindungi sendi rotator cuff dan mengaktifkan pektoral lebih optimal." },
+      { icon: "📐", title: "Sudut Latihan", text: "Variasikan sudut bangku: flat untuk massa keseluruhan, incline untuk upper chest, decline untuk lower chest. Ketiganya wajib masuk program." },
+      { icon: "⏱️", title: "Waktu Istirahat", text: "Istirahat 60–90 detik untuk hipertrofi. Untuk kekuatan (4–6 rep), istirahat bisa 2–3 menit agar performa tetap optimal." },
+      { icon: "🔄", title: "Mind-Muscle Connection", text: "Bayangkan memeras buah jeruk di ketiak saat melakukan flyes. Fokus pada kontraksi otot dada, bukan sekedar menggerakkan beban." },
+    ],
+    plan: [
+      { exercise: "Bench Press", sets: "4", reps: "6–8", rest: "90 dtk", note: "Warm-up 2 set ringan" },
+      { exercise: "Incline DB Press", sets: "3", reps: "10–12", rest: "75 dtk", note: "Fokus upper chest" },
+      { exercise: "Cable Flyes", sets: "3", reps: "12–15", rest: "60 dtk", note: "Squeeze di puncak" },
+      { exercise: "Push-Up", sets: "3", reps: "Gagal", rest: "60 dtk", note: "Finisher burnout" },
+    ]
+  },
+
+  back: {
+    name: "PUNGGUNG",
+    subtitle: "Back / Latissimus Dorsi + Rhomboids",
+    category: "Upper Body",
+    icon: "🏋️",
+    description: "Otot punggung adalah kelompok otot terbesar tubuh bagian atas. Punggung yang kuat memberikan postur yang tegak, mengurangi risiko nyeri punggung, dan merupakan fondasi kekuatan untuk hampir semua gerakan angkat beban.",
+    sets: 14, exercises: 10, rest: "75-90 dtk",
+    exercises: [
+      { name: "Deadlift", diff: "advanced", desc: "Raja dari semua latihan compound. Mengaktifkan seluruh rantai posterior dari kaki hingga punggung atas. Teknik adalah segalanya dalam gerakan ini.", tags: ["Barbel", "Compound", "Full Chain"] },
+      { name: "Pull-Up / Chin-Up", diff: "intermediate", desc: "Gerakan terbaik untuk lebar punggung. Pull-up (pronasi) menarget lat lebih luas, chin-up (supinasi) lebih melibatkan bisep.", tags: ["Bodyweight", "Compound", "Lat"] },
+      { name: "Bent-Over Row", diff: "intermediate", desc: "Gerakan rowing terbaik untuk ketebalan punggung. Jaga punggung tetap sejajar lantai dan tarik barbel ke perut bagian bawah.", tags: ["Barbel", "Compound", "Tebal"] },
+      { name: "Lat Pulldown", diff: "beginner", desc: "Alternatif pull-up yang sangat efektif. Ideal untuk pemula yang belum bisa pull-up. Fokus pada kontraksi lat di bawah gerakan.", tags: ["Kabel", "Compound", "Lat"] },
+      { name: "Seated Cable Row", diff: "beginner", desc: "Menarget ketebalan punggung tengah. Tarik handle ke perut bagian bawah sambil membusungkan dada dan retraksi bahu.", tags: ["Kabel", "Compound", "Mid Back"] },
+      { name: "T-Bar Row", diff: "intermediate", desc: "Variasi rowing yang sangat efektif untuk ketebalan rhomboid dan trapezius tengah. Berikan squeeze penuh di setiap repetisi.", tags: ["Mesin", "Compound", "Rhomboid"] },
+    ],
+    tips: [
+      { icon: "🙅", title: "Hindari Ego Lifting", text: "Beban terlalu berat menyebabkan kompensasi dengan lengan dan momentum. Gunakan beban yang memungkinkan kontraksi penuh otot punggung." },
+      { icon: "🤜", title: "Tarik dengan Siku", text: "Bayangkan siku sebagai 'kail' saat rowing. Ini mengalihkan fokus dari tangan ke lat dan rhomboid, membuat kontraksi jauh lebih efektif." },
+      { icon: "📏", title: "Jaga Posisi Netral", text: "Selalu jaga tulang belakang dalam posisi netral (sedikit lordosis) saat deadlift dan rowing untuk mencegah cedera diskus tulang belakang." },
+      { icon: "🌊", title: "Full Range of Motion", text: "Biarkan lat terentang penuh di posisi atas pull-up atau bawah lat pulldown. Stretch yang baik sama pentingnya dengan kontraksi." },
+    ],
+    plan: [
+      { exercise: "Deadlift", sets: "4", reps: "4–6", rest: "3 mnt", note: "Teknik prioritas utama" },
+      { exercise: "Pull-Up", sets: "4", reps: "Maks", rest: "90 dtk", note: "Tambah beban jika >12 rep" },
+      { exercise: "Bent-Over Row", sets: "3", reps: "8–10", rest: "75 dtk", note: "Jaga punggung rata" },
+      { exercise: "Lat Pulldown", sets: "3", reps: "12–15", rest: "60 dtk", note: "Finisher isolasi" },
+    ]
+  },
+
+  shoulder: {
+    name: "BAHU",
+    subtitle: "Shoulders / Deltoid (Anterior, Lateral, Posterior)",
+    category: "Upper Body",
+    icon: "💪",
+    description: "Bahu terdiri dari tiga kepala: anterior (depan), lateral (samping), dan posterior (belakang). Bahu yang berkembang merata memberikan tampilan lebar yang proporsional dan mencegah cedera rotator cuff.",
+    sets: 12, exercises: 7, rest: "60 dtk",
+    exercises: [
+      { name: "Overhead Press (OHP)", diff: "intermediate", desc: "Latihan compound utama bahu. Bisa dilakukan dengan barbel atau dumbbell, berdiri atau duduk. Mengaktifkan ketiga kepala deltoid sekaligus.", tags: ["Barbel", "Compound", "Utama"] },
+      { name: "Lateral Raise", diff: "beginner", desc: "Isolasi terbaik untuk lateral deltoid (lebar bahu). Angkat lengan ke samping dengan siku sedikit ditekuk, berhenti sejajar bahu.", tags: ["Dumbbell", "Isolasi", "Lateral"] },
+      { name: "Rear Delt Fly", diff: "beginner", desc: "Menarget posterior deltoid yang sering diabaikan. Tekuk badan ke depan, angkat dumbbell ke samping seperti burung mengepakkan sayap.", tags: ["Dumbbell", "Isolasi", "Posterior"] },
+      { name: "Front Raise", diff: "beginner", desc: "Mengaktifkan anterior deltoid. Angkat dumbbell ke depan hingga sejajar bahu. Jangan gunakan momentum ayunan tubuh.", tags: ["Dumbbell", "Isolasi", "Anterior"] },
+      { name: "Arnold Press", diff: "intermediate", desc: "Variasi rotasi press yang diciptakan Arnold Schwarzenegger. Mengaktifkan ketiga kepala deltoid dalam satu gerakan dinamis.", tags: ["Dumbbell", "Compound", "Arnold"] },
+      { name: "Face Pull", diff: "beginner", desc: "Terbaik untuk kesehatan bahu dan rear delt. Gunakan kabel dengan tali di ketinggian wajah, tarik ke arah wajah sambil retraksi bahu.", tags: ["Kabel", "Isolasi", "Kesehatan"] },
+    ],
+    tips: [
+      { icon: "⚖️", title: "Keseimbangan 3 Kepala", text: "Jangan hanya fokus pada front delt (OHP saja). Latih ketiga kepala secara merata untuk tampilan bahu bulat dan mencegah postur bungkuk." },
+      { icon: "🔒", title: "Jangan Kunci Siku", text: "Pertahankan siku sedikit ditekuk saat lateral raise. Kunci siku memindahkan tekanan ke sendi dan mengurangi aktivasi otot." },
+      { icon: "❤️", title: "Prioritaskan Kesehatan", text: "Bahu adalah sendi paling rentan cedera. Selalu mulai sesi dengan rotator cuff warm-up dan jangan lewatkan latihan face pull." },
+    ],
+    plan: [
+      { exercise: "Overhead Press", sets: "4", reps: "6–8", rest: "90 dtk", note: "Compound utama" },
+      { exercise: "Lateral Raise", sets: "4", reps: "12–15", rest: "60 dtk", note: "Fokus lebar bahu" },
+      { exercise: "Rear Delt Fly", sets: "3", reps: "15–20", rest: "45 dtk", note: "Sering diabaikan!" },
+      { exercise: "Face Pull", sets: "3", reps: "15–20", rest: "45 dtk", note: "Kesehatan rotator cuff" },
+    ]
+  },
+
+  bicep: {
+    name: "BISEP",
+    subtitle: "Biceps / Biceps Brachii",
+    category: "Upper Body",
+    icon: "🦾",
+    description: "Bisep brachii terdiri dari dua kepala: long head dan short head. Otot ini bertugas untuk fleksi siku dan supinasi lengan bawah. Bisep yang berkembang baik memberikan tampilan 'puncak' yang diidamkan banyak orang.",
+    sets: 9, exercises: 6, rest: "60 dtk",
+    exercises: [
+      { name: "Barbell Curl", diff: "beginner", desc: "Latihan bisep paling klasik. Berdiri tegak, curl barbel dari pinggul ke bahu. Jaga siku tetap di sisi tubuh dan hindari ayunan tubuh.", tags: ["Barbel", "Compound", "Utama"] },
+      { name: "Dumbbell Hammer Curl", diff: "beginner", desc: "Grip netral (ibu jari ke atas) menarget brachialis dan brachioradialis lebih banyak. Memberikan ketebalan lengan yang lebih penuh.", tags: ["Dumbbell", "Isolasi", "Brachialis"] },
+      { name: "Incline Dumbbell Curl", diff: "intermediate", desc: "Duduk di bangku miring untuk mendapatkan stretch maksimal pada long head bisep. Posisi ini menghasilkan puncak bisep yang lebih tinggi.", tags: ["Dumbbell", "Isolasi", "Long Head"] },
+      { name: "Cable Curl", diff: "beginner", desc: "Kabel memberikan tension konstan sepanjang gerakan, berbeda dengan dumbbell yang titik terberatnya hanya di tengah. Sangat efektif untuk hipertrofi.", tags: ["Kabel", "Isolasi", "Tension"] },
+      { name: "Preacher Curl", diff: "intermediate", desc: "Eliminasi momentum total. Lengan bertumpu pada bangku preacher, memaksa bisep bekerja dari posisi stretch penuh.", tags: ["Bangku", "Isolasi", "Anti-Cheat"] },
+      { name: "Concentration Curl", diff: "beginner", desc: "Isolasi sempurna. Duduk, tumpukan siku di paha, curl dumbbell secara perlahan. Sempurna untuk mind-muscle connection.", tags: ["Dumbbell", "Isolasi", "Fokus"] },
+    ],
+    tips: [
+      { icon: "📌", title: "Siku Jadi Jangkar", text: "Siku tidak boleh bergerak maju mundur saat curl. Jadikan siku sebagai titik poros yang diam untuk isolasi maksimal." },
+      { icon: "🔄", title: "Supinasi di Puncak", text: "Saat menggunakan dumbbell, putar pergelangan tangan ke luar (supinasi) di puncak gerakan untuk squeeze bisep lebih keras." },
+      { icon: "📉", title: "Eccentric Lambat", text: "Turunkan beban secara perlahan (3–4 detik). Fase eccentric sama pentingnya dengan concentric untuk pertumbuhan otot." },
+    ],
+    plan: [
+      { exercise: "Barbell Curl", sets: "4", reps: "8–10", rest: "75 dtk", note: "Gerakan utama" },
+      { exercise: "Incline DB Curl", sets: "3", reps: "10–12", rest: "60 dtk", note: "Stretch long head" },
+      { exercise: "Hammer Curl", sets: "3", reps: "12–15", rest: "60 dtk", note: "Brachialis & thickness" },
+      { exercise: "Cable Curl", sets: "2", reps: "15–20", rest: "45 dtk", note: "Finisher pump" },
+    ]
+  },
+
+  tricep: {
+    name: "TRISEP",
+    subtitle: "Triceps / Triceps Brachii",
+    category: "Upper Body",
+    icon: "🔱",
+    description: "Trisep brachii membentuk 2/3 dari massa lengan atas dan terdiri dari tiga kepala: long head, lateral head, dan medial head. Sering diabaikan, padahal trisep yang kuat adalah kunci untuk meningkatkan bench press dan overhead press secara signifikan.",
+    sets: 9, exercises: 6, rest: "60 dtk",
+    exercises: [
+      { name: "Close-Grip Bench Press", diff: "intermediate", desc: "Variasi bench press dengan grip sempit (bahu-lebar). Latihan compound terbaik untuk trisep, memungkinkan penggunaan beban berat.", tags: ["Barbel", "Compound", "Utama"] },
+      { name: "Tricep Pushdown", diff: "beginner", desc: "Gerakan isolasi klasik menggunakan kabel. Gunakan bar atau tali. Jaga siku menempel di sisi tubuh sepanjang gerakan.", tags: ["Kabel", "Isolasi", "Lateral Head"] },
+      { name: "Overhead Tricep Extension", diff: "intermediate", desc: "Menarget long head trisep yang terbesar. Bisa dilakukan berdiri atau duduk dengan dumbbell atau kabel di atas kepala.", tags: ["Dumbbell", "Isolasi", "Long Head"] },
+      { name: "Skull Crusher", diff: "intermediate", desc: "Berbaring di bangku, turunkan barbel EZ ke kening (hati-hati!). Latihan trisep intensitas tinggi yang sangat efektif.", tags: ["Barbel EZ", "Isolasi", "Intensif"] },
+      { name: "Tricep Dips", diff: "beginner", desc: "Bodyweight compound yang mengaktifkan semua tiga kepala trisep. Bisa dipersulit dengan menambah beban di pangkuan.", tags: ["Bodyweight", "Compound", "Semua Head"] },
+      { name: "Single-Arm Pushdown", diff: "beginner", desc: "Kerjakan satu tangan sekaligus untuk balance dan isolasi yang lebih baik. Membantu memperbaiki asimetri kekuatan antara kedua tangan.", tags: ["Kabel", "Isolasi", "Satu Sisi"] },
+    ],
+    tips: [
+      { icon: "📍", title: "Kunci Siku", text: "Berbeda dengan bisep, trisep bekerja lebih baik dengan siku yang terkunci di posisi. Hindari pergerakan siku ke depan atau belakang." },
+      { icon: "🎯", title: "Long Head Penting", text: "Long head membentuk tonjolan trisep yang terlihat. Latihan overhead (tangan di atas kepala) adalah satu-satunya cara mengaktifkan penuh long head." },
+      { icon: "✅", title: "Ekstensi Penuh", text: "Pastikan arm ekstensi penuh di setiap repetisi pushdown. Setengah rep = setengah hasil. Squeeze keras saat lengan lurus penuh." },
+    ],
+    plan: [
+      { exercise: "Close-Grip Bench", sets: "4", reps: "8–10", rest: "90 dtk", note: "Compound utama" },
+      { exercise: "Skull Crusher", sets: "3", reps: "10–12", rest: "75 dtk", note: "Kontrol turun!" },
+      { exercise: "Overhead Extension", sets: "3", reps: "12–15", rest: "60 dtk", note: "Long head fokus" },
+      { exercise: "Tricep Pushdown", sets: "3", reps: "15–20", rest: "45 dtk", note: "Finisher pump" },
+    ]
+  },
+
+  abs: {
+    name: "PERUT",
+    subtitle: "Abs / Core / Abdominals",
+    category: "Core",
+    icon: "⚡",
+    description: "Core bukan hanya six-pack. Ini adalah sistem otot kompleks yang mencakup rectus abdominis, obliques, transversus abdominis, dan lower back. Core yang kuat adalah fondasi semua gerakan atletik dan mencegah cedera punggung.",
+    sets: 10, exercises: 9, rest: "45-60 dtk",
+    exercises: [
+      { name: "Plank (Variasi)", diff: "beginner", desc: "Raja latihan core isometrik. Mulai dari plank standar, tingkatkan ke plank dengan angkat kaki, plank sisi, atau plank dengan gerakan arm reach.", tags: ["Bodyweight", "Isometrik", "Stabilitas"] },
+      { name: "Hanging Leg Raise", diff: "advanced", desc: "Latihan terbaik untuk lower abs. Gantung di pull-up bar, angkat kaki hingga sejajar pinggang atau lebih tinggi dengan kontrol penuh.", tags: ["Pull-up Bar", "Compound", "Lower Abs"] },
+      { name: "Cable Crunch", diff: "intermediate", desc: "Crunch dengan resistensi progresif dari kabel. Berlutut, pegang tali di atas kepala, crunch ke bawah sambil flexikan tulang belakang.", tags: ["Kabel", "Compound", "Progresif"] },
+      { name: "Russian Twist", diff: "beginner", desc: "Menarget oblique secara efektif. Duduk miring 45°, kaki sedikit terangkat, putar tubuh bergantian ke kiri dan kanan dengan kontrol.", tags: ["Bodyweight", "Oblique", "Rotasi"] },
+      { name: "Ab Wheel Rollout", diff: "advanced", desc: "Mungkin latihan core paling menantang. Mengaktifkan hampir seluruh otot core dalam satu gerakan kontrol dinamis.", tags: ["Alat", "Advanced", "Full Core"] },
+      { name: "Dead Bug", diff: "beginner", desc: "Latihan stabilitas core yang aman untuk punggung. Berbaring, gerakkan lengan dan kaki berlawanan secara terkontrol sambil menjaga punggung menempel lantai.", tags: ["Bodyweight", "Stabilitas", "Aman"] },
+    ],
+    tips: [
+      { icon: "🥗", title: "Diet Lebih Penting", text: "Six-pack terlihat bukan dari latihan abs saja, tapi dari body fat yang rendah. Training abs membangun otot, tapi diet yang membuat mereka terlihat." },
+      { icon: "🌬️", title: "Pernapasan Diafragma", text: "Hembuskan napas kuat saat kontraksi (concentric) dan hirup napas saat melepas. Ini mengaktifkan transversus abdominis lebih dalam." },
+      { icon: "🔢", title: "Tambah Resistensi", text: "Seperti otot lain, abs perlu progressive overload. Jangan hanya nambah rep terus — tambahkan beban atau kesulitan gerakan secara bertahap." },
+    ],
+    plan: [
+      { exercise: "Plank", sets: "3", reps: "60 dtk", rest: "45 dtk", note: "Posisi netral tulang belakang" },
+      { exercise: "Hanging Leg Raise", sets: "3", reps: "10–15", rest: "60 dtk", note: "Kontrol penuh turun" },
+      { exercise: "Cable Crunch", sets: "3", reps: "15–20", rest: "45 dtk", note: "Flexikan tulang belakang" },
+      { exercise: "Russian Twist", sets: "3", reps: "20 putaran", rest: "45 dtk", note: "Oblique finisher" },
+    ]
+  },
+
+  leg: {
+    name: "KAKI",
+    subtitle: "Legs / Quadriceps + Hamstrings",
+    category: "Lower Body",
+    icon: "🦵",
+    description: "Kaki adalah kelompok otot terbesar dalam tubuh. Latihan kaki merangsang produksi hormon anabolik (testosteron & GH) yang juga menguntungkan seluruh tubuh. 'Never skip leg day' bukan sekadar meme — ini adalah kebenaran ilmiah!",
+    sets: 16, exercises: 8, rest: "90 dtk",
+    exercises: [
+      { name: "Squat (Back Squat)", diff: "intermediate", desc: "Raja dari semua latihan. Squat merekrut lebih banyak serat otot daripada latihan manapun. Teknik yang benar adalah investasi jangka panjang.", tags: ["Barbel", "Compound", "Raja Latihan"] },
+      { name: "Leg Press", diff: "beginner", desc: "Alternatif squat yang lebih aman untuk punggung. Variasikan posisi kaki untuk menarget quad, hamstring, atau glute secara berbeda.", tags: ["Mesin", "Compound", "Aman"] },
+      { name: "Romanian Deadlift", diff: "intermediate", desc: "Terbaik untuk hamstring. Berbeda dari deadlift konvensional — lutut sedikit ditekuk dan pinggul didorong ke belakang untuk stretch hamstring maksimal.", tags: ["Barbel", "Compound", "Hamstring"] },
+      { name: "Lunge (Berbagai Variasi)", diff: "beginner", desc: "Latihan unilateral (satu kaki) yang melatih keseimbangan dan stabilitas. Forward, reverse, walking, atau Bulgarian split squat.", tags: ["Bodyweight", "Unilateral", "Keseimbangan"] },
+      { name: "Leg Extension", diff: "beginner", desc: "Isolasi quad terbaik. Gunakan sebagai warm-up atau finisher. Hindari mengangkat beban maksimal untuk menjaga kesehatan sendi lutut.", tags: ["Mesin", "Isolasi", "Quad"] },
+      { name: "Leg Curl (Seated/Lying)", diff: "beginner", desc: "Isolasi hamstring terbaik. Versi seated memberikan stretch lebih penuh di bagian atas hamstring. Penting untuk keseimbangan quad–hamstring.", tags: ["Mesin", "Isolasi", "Hamstring"] },
+    ],
+    tips: [
+      { icon: "🦵", title: "Kedalaman Squat", text: "Squat minimal hingga paha sejajar lantai (parallel). Full squat lebih baik jika fleksibilitas mengizinkan. Kedalaman = aktivasi glute & hamstring lebih besar." },
+      { icon: "👣", title: "Posisi Kaki", text: "Kaki selebar bahu, jari kaki sedikit keluar (10–30°). Lutut harus mengikuti arah jari kaki — jangan biarkan lutut jatuh ke dalam (valgus)." },
+      { icon: "🔁", title: "Unilateral Wajib", text: "Tambahkan latihan satu kaki (lunge, Bulgarian split squat) untuk memperbaiki asimetri kekuatan. Kaki yang lemah akan selalu menghambat perkembangan." },
+    ],
+    plan: [
+      { exercise: "Back Squat", sets: "4", reps: "6–8", rest: "2.5 mnt", note: "Warm-up 3 set wajib" },
+      { exercise: "Romanian Deadlift", sets: "3", reps: "10–12", rest: "90 dtk", note: "Hamstring stretch" },
+      { exercise: "Leg Press", sets: "3", reps: "12–15", rest: "90 dtk", note: "Kaki tinggi = glute" },
+      { exercise: "Lunge", sets: "3", reps: "12 per kaki", rest: "60 dtk", note: "Finisher unilateral" },
+    ]
+  },
+
+  glute: {
+    name: "GLUTE",
+    subtitle: "Glutes & Hamstrings / Gluteus Maximus",
+    category: "Lower Body",
+    icon: "🍑",
+    description: "Gluteus maximus adalah otot terbesar dalam tubuh manusia. Glute yang kuat esensial untuk tenaga atletik, postur tubuh, kesehatan punggung bawah, dan keseimbangan panggul. Diperlukan oleh pria maupun wanita untuk performa optimal.",
+    sets: 12, exercises: 6, rest: "75 dtk",
+    exercises: [
+      { name: "Hip Thrust", diff: "beginner", desc: "Latihan isolasi glute terbaik di dunia. Punggung bersandar di bangku, barbel di atas pinggul, dorong pinggul ke atas dengan squeeze glute di puncak.", tags: ["Barbel", "Isolasi", "Terbaik"] },
+      { name: "Bulgarian Split Squat", diff: "advanced", desc: "Latihan kaki/glute paling menantang dan efektif. Kaki belakang di bangku, squatkan kaki depan dalam. Sangat mengaktifkan glute dan quad.", tags: ["Dumbbell", "Unilateral", "Intensif"] },
+      { name: "Romanian Deadlift", diff: "intermediate", desc: "Kombinasi hamstring dan glute yang sempurna. Bayangkan mendorong pinggul ke belakang (bukan menunduk) untuk aktivasi hamstring-glute maksimal.", tags: ["Barbel", "Compound", "Hamstring"] },
+      { name: "Cable Kickback", diff: "beginner", desc: "Isolasi glute dengan kabel terpasang di pergelangan kaki. Tendang kaki ke belakang dan atas sambil squeeze glute di puncak gerakan.", tags: ["Kabel", "Isolasi", "Bentuk"] },
+      { name: "Sumo Deadlift", diff: "intermediate", desc: "Stance lebar dengan jari kaki keluar jauh. Menarget adduktor dan glute lebih banyak dibandingkan conventional deadlift.", tags: ["Barbel", "Compound", "Sumo"] },
+      { name: "Glute Bridge", diff: "beginner", desc: "Versi lebih sederhana hip thrust — tanpa bangku. Sempurna untuk pemula atau activation warm-up sebelum sesi besar.", tags: ["Bodyweight", "Aktivasi", "Pemula"] },
+    ],
+    tips: [
+      { icon: "🍋", title: "Squeeze di Puncak", text: "Di puncak setiap hip thrust dan kickback, squeeze glute sekuat mungkin selama 1–2 detik. Ini perbedaan antara 'angkat beban' dan 'latih otot'." },
+      { icon: "📐", title: "Titik Tumpu Betis", text: "Saat hip thrust, pastikan betis tegak lurus lantai (90°) di posisi atas. Kaki terlalu dekat = quad dominan. Kaki terlalu jauh = hamstring dominan." },
+      { icon: "🧲", title: "Aktifkan Sebelum Latihan", text: "Mulai sesi glute dengan activation set ringan (glute bridge, clamshell) untuk memastikan glute 'terjaga' sebelum latihan berat. Banyak orang punya 'dormant glutes'." },
+    ],
+    plan: [
+      { exercise: "Hip Thrust", sets: "4", reps: "10–12", rest: "90 dtk", note: "Squeeze 2 detik di atas" },
+      { exercise: "Bulgarian Split Squat", sets: "3", reps: "10 per kaki", rest: "90 dtk", note: "Rentang penuh!" },
+      { exercise: "RDL", sets: "3", reps: "12–15", rest: "75 dtk", note: "Hamstring stretch" },
+      { exercise: "Cable Kickback", sets: "3", reps: "15–20 per kaki", rest: "45 dtk", note: "Finisher isolasi" },
+    ]
+  },
+
+  calf: {
+    name: "BETIS",
+    subtitle: "Calves / Gastrocnemius + Soleus",
+    category: "Lower Body",
+    icon: "🏃",
+    description: "Betis terdiri dari dua otot utama: gastrocnemius (yang terlihat saat lutut lurus) dan soleus (yang diaktifkan saat lutut ditekuk). Betis sering menjadi 'lagging muscle' karena membutuhkan volume dan frekuensi latihan yang sangat tinggi.",
+    sets: 12, exercises: 5, rest: "60 dtk",
+    exercises: [
+      { name: "Standing Calf Raise", diff: "beginner", desc: "Gerakan dasar betis. Bisa dilakukan di mesin, dengan barbel, atau dumbbell. Fokus pada rentang gerak penuh — stretch di bawah, squeeze di atas.", tags: ["Mesin/Barbel", "Utama", "Gastrocnemius"] },
+      { name: "Seated Calf Raise", diff: "beginner", desc: "Menarget soleus secara spesifik karena lutut ditekuk. Otot soleus sering lebih kurang berkembang, jadi gerakan ini sangat penting.", tags: ["Mesin", "Isolasi", "Soleus"] },
+      { name: "Donkey Calf Raise", diff: "intermediate", desc: "Variasi lama yang sangat efektif. Condongkan tubuh ke depan sambil mengangkat beban di pinggang. Memberikan stretch yang lebih dalam pada gastrocnemius.", tags: ["Berat Badan", "Stretch", "Intensif"] },
+      { name: "Jump Rope", diff: "beginner", desc: "Latihan kardio sekaligus mengembangkan explosive calf strength. 10–15 menit lompat tali memberikan stimulus berbeda dari calf raise konvensional.", tags: ["Kardio", "Explosive", "Bodyweight"] },
+      { name: "Single-Leg Calf Raise", diff: "beginner", desc: "Kerjakan satu kaki sekaligus untuk beban dua kali lipat dari bodyweight calf raise. Sempurna jika tidak ada mesin betis.", tags: ["Bodyweight", "Unilateral", "No Equipment"] },
+    ],
+    tips: [
+      { icon: "📈", title: "Volume Tinggi", text: "Betis terbiasa dengan ribuan langkah setiap hari, jadi adaptasi sangat cepat. Butuh 15–25 set per minggu (lebih banyak dari otot lain) untuk pertumbuhan optimal." },
+      { icon: "⬇️", title: "Stretch Penuh di Bawah", text: "Jangan 'bounce' di bawah gerakan. Turunkan tumit sepenuhnya hingga merasakan stretch betis, tahan 1 detik, baru angkat. Ini kunci utama pertumbuhan betis." },
+      { icon: "🔁", title: "Frekuensi Tinggi", text: "Latih betis 3–4 kali per minggu. Karena serat otot betis mayoritas slow-twitch, mereka recovery lebih cepat dan bisa dilatih lebih sering." },
+    ],
+    plan: [
+      { exercise: "Standing Calf Raise", sets: "5", reps: "12–15", rest: "60 dtk", note: "Stretch penuh di bawah" },
+      { exercise: "Seated Calf Raise", sets: "4", reps: "15–20", rest: "60 dtk", note: "Targetkan soleus" },
+      { exercise: "Single-Leg Raise", sets: "3", reps: "15 per kaki", rest: "45 dtk", note: "Finisher unilateral" },
+    ]
+  },
+
+  cardio: {
+    name: "KARDIO",
+    subtitle: "Cardiovascular Training",
+    category: "Cardio",
+    icon: "❤️",
+    description: "Kardio bukan hanya tentang membakar kalori — ini adalah investasi untuk kesehatan jantung, kapasitas aerobik, pemulihan otot, dan kesehatan mental. Pilih metode yang sesuai dengan tujuanmu: fat loss, endurance, atau general health.",
+    sets: 0, exercises: 7, rest: "Tergantung metode",
+    exercises: [
+      { name: "HIIT (High Intensity Interval)", diff: "advanced", desc: "Interval intensitas tinggi bergantian dengan istirahat. Contoh: sprint 20 detik, jalan 40 detik, ulang 8–10 kali. Efisien untuk fat loss dan VO2max.", tags: ["Intensif", "Fat Loss", "Efisien"] },
+      { name: "LISS Cardio (Jalan/Jogging)", diff: "beginner", desc: "Low Intensity Steady State. Jalan cepat atau jogging santai 30–60 menit. Cocok untuk recovery aktif dan fat burning tanpa mengganggu latihan beban.", tags: ["Ringan", "Recovery", "Fat Burning"] },
+      { name: "Rowing Machine", diff: "intermediate", desc: "Full body cardio yang mengaktifkan punggung, lengan, dan kaki. Sangat efektif dan rendah benturan (low impact) untuk sendi.", tags: ["Mesin", "Full Body", "Low Impact"] },
+      { name: "Jump Rope (Lompat Tali)", diff: "intermediate", desc: "Membakar kalori sangat efisien (hingga 12 cal/menit). Melatih koordinasi, timing, dan calf strength. Bisa dilakukan di mana saja.", tags: ["Bodyweight", "Koordinasi", "Efisien"] },
+      { name: "Cycling (Stasioner)", diff: "beginner", desc: "Kardio low-impact yang ramah untuk lutut. Variasikan intensitas dengan sprint interval di atas sepeda untuk lebih banyak kalori terbakar.", tags: ["Mesin", "Low Impact", "Lutut Aman"] },
+      { name: "Swimming", diff: "intermediate", desc: "Latihan full body terendah benturannya. Sangat baik untuk recovery, melatih pernapasan, dan membangun daya tahan kardiovaskuler.", tags: ["Full Body", "Low Impact", "Endurance"] },
+    ],
+    tips: [
+      { icon: "🎚️", title: "Zone 2 Training", text: "Kardio di 'Zone 2' (65–75% detak jantung maks) selama 45–60 menit paling efektif untuk kesehatan mitokondria dan fat burning jangka panjang." },
+      { icon: "⏰", title: "Waktu Terbaik Kardio", text: "Untuk muscle gain, lakukan kardio terpisah dari latihan beban atau setelahnya — bukan sebelum. Minimal 6 jam berselang jika harus di hari yang sama." },
+      { icon: "📊", title: "220 Minus Usia", text: "Estimasi detak jantung maksimum = 220 - usia. Untuk fat burning, targetkan 65–75% dari angka itu. Gunakan smartwatch atau tempel jari di leher." },
+    ],
+    plan: [
+      { exercise: "HIIT Sprint", sets: "8–10 ronde", reps: "20 dtk ON / 40 dtk OFF", rest: "2 mnt antar sirkuit", note: "Max 3x seminggu" },
+      { exercise: "LISS Jogging", sets: "1 sesi", reps: "30–45 mnt", rest: "—", note: "Recovery days" },
+      { exercise: "Jump Rope", sets: "5 menit", reps: "3 set", rest: "1 mnt", note: "Warm-up/finisher" },
+    ]
+  },
+
+  fullbody: {
+    name: "FULL BODY",
+    subtitle: "Full Body Workout",
+    category: "Complete",
+    icon: "🔥",
+    description: "Full body workout melatih semua kelompok otot utama dalam satu sesi. Ideal untuk pemula, orang sibuk (2–3 hari/minggu), atau sebagai deload setelah program split intensif. Hormonal response-nya juga sangat baik karena stimulus besar ke seluruh tubuh.",
+    sets: 15, exercises: 5, rest: "90 dtk",
+    exercises: [
+      { name: "Squat + Overhead Press", diff: "intermediate", desc: "Gerakan compound gabungan: squat barbel, lalu saat naik langsung press ke atas. Mengaktifkan kaki, core, bahu, dan trisep dalam satu gerakan dinamis.", tags: ["Barbel", "Compound", "Combo"] },
+      { name: "Deadlift", diff: "intermediate", desc: "Satu gerakan, seluruh tubuh. Dari kaki hingga leher, hampir semua otot terlibat. Pillar utama setiap program full body yang serius.", tags: ["Barbel", "Compound", "Total Body"] },
+      { name: "Pull-Up + Dip Superset", diff: "advanced", desc: "Superset push-pull yang sempurna. Pull-up untuk punggung dan bisep, dip untuk dada dan trisep. Efisiensi waktu luar biasa.", tags: ["Bodyweight", "Superset", "Push-Pull"] },
+      { name: "Turkish Get-Up", diff: "advanced", desc: "Gerakan mobilitas dan kekuatan kompleks menggunakan kettlebell. Dari posisi berbaring ke berdiri dengan satu lengan terangkat. Melatih stabilitas total.", tags: ["Kettlebell", "Mobilitas", "Kompleks"] },
+      { name: "Farmer's Walk", diff: "beginner", desc: "Bawa dumbbell/barbel berat berjalan sejauh mungkin. Melatih grip, core stabilitas, traps, dan kardio anaerob sekaligus. Sederhana tapi brutal.", tags: ["Dumbbell", "Fungsional", "Grip"] },
+    ],
+    tips: [
+      { icon: "📅", title: "Frekuensi Optimal", text: "Full body 3x/minggu (Senin-Rabu-Jumat) dengan istirahat di antara sesi. Recovery 48 jam antar sesi penting untuk super-kompensasi otot." },
+      { icon: "🔢", title: "Push-Pull-Legs Pattern", text: "Dalam satu sesi full body, pastikan ada gerakan Push (press), Pull (row/pull-up), dan Hinge/Squat (deadlift/squat). Ini menjamin semua otot terlatih." },
+      { icon: "📉", title: "Kurangi Volume per Otot", text: "Karena melatih semua otot sekaligus, volume per kelompok otot harus dikurangi. 2–3 set per gerakan sudah cukup jika frekuensinya 3x/minggu." },
+    ],
+    plan: [
+      { exercise: "Squat", sets: "3", reps: "8–10", rest: "90 dtk", note: "Gerakan anchor kaki" },
+      { exercise: "Deadlift / RDL", sets: "3", reps: "8–10", rest: "90 dtk", note: "Hinge pattern" },
+      { exercise: "Pull-Up / Row", sets: "3", reps: "8–10", rest: "75 dtk", note: "Pull pattern" },
+      { exercise: "Dip / Bench Press", sets: "3", reps: "8–10", rest: "75 dtk", note: "Push pattern" },
+      { exercise: "Farmer's Walk", sets: "3", reps: "30 meter", rest: "90 dtk", note: "Finisher" },
+    ]
+  }
+};
+
+function showMuscle(key) {
+  const data = muscleData[key];
+  if (!data) return;
+
+  // Update active button
+  document.querySelectorAll('.muscle-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelectorAll('.muscle-btn').forEach(btn => {
+    if (btn.getAttribute('onclick') === `showMuscle('${key}')`) btn.classList.add('active');
+  });
+
+  const diffClass = { beginner: 'diff-beginner', intermediate: 'diff-intermediate', advanced: 'diff-advanced' };
+  const diffLabel = { beginner: 'Pemula', intermediate: 'Menengah', advanced: 'Lanjut' };
+
+  const exerciseCards = data.exercises.map((ex, i) => `
+    <div class="exercise-card">
+      <div class="card-num">0${i+1}</div>
+      <div class="card-difficulty ${diffClass[ex.diff]}">
+        <span class="diff-dot"></span>${diffLabel[ex.diff]}
+      </div>
+      <div class="card-title">${ex.name}</div>
+      <div class="card-desc">${ex.desc}</div>
+      <div class="card-tags">${ex.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+
+  const tipCards = data.tips.map(tip => `
+    <div class="tip-card">
+      <div class="tip-icon">${tip.icon}</div>
+      <div class="tip-content">
+        <div class="tip-title">${tip.title}</div>
+        <div class="tip-text">${tip.text}</div>
+      </div>
+    </div>
+  `).join('');
+
+  const planRows = data.plan.map(p => `
+    <tr>
+      <td><strong style="color:#fff">${p.exercise}</strong></td>
+      <td><span class="sets-reps">${p.sets}</span></td>
+      <td><span class="sets-reps">${p.reps}</span></td>
+      <td><span class="rest-badge">${p.rest}</span></td>
+      <td style="color:var(--text-muted);font-size:12px">${p.note}</td>
+    </tr>
+  `).join('');
+
+  const statsSection = data.sets > 0 ? `
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">${data.exercises.length}</div><div class="stat-label">Latihan</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><div class="stat-num">${data.sets}</div><div class="stat-label">Set / Sesi</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><div class="stat-num">${data.rest.split(' ')[0]}</div><div class="stat-label">Istirahat</div></div>
+    </div>
+  ` : `
+    <div class="hero-stats">
+      <div class="stat-item"><div class="stat-num">${data.exercises.length}</div><div class="stat-label">Metode</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><div class="stat-num">3x</div><div class="stat-label">Per Minggu</div></div>
+      <div class="stat-divider"></div>
+      <div class="stat-item"><div class="stat-num">❤️</div><div class="stat-label">Zone 2</div></div>
+    </div>
+  `;
+
+  document.getElementById('content-area').innerHTML = `
+    <div class="content-panel">
+      <!-- HERO -->
+      <div class="hero-panel" data-muscle="${data.name}">
+        <div class="muscle-category">${data.icon} &nbsp; ${data.category}</div>
+        <div class="hero-title">LATIHAN <span>${data.name}</span></div>
+        <p class="hero-desc">${data.description}</p>
+        ${statsSection}
+      </div>
+
+      <!-- EXERCISES -->
+      <div class="section-header">
+        <span class="section-title">Gerakan Latihan</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="exercises-grid">${exerciseCards}</div>
+
+      <!-- TIPS -->
+      <div class="section-header">
+        <span class="section-title">Tips & Teknik</span>
+        <div class="section-line"></div>
+      </div>
+      <div class="tips-grid">${tipCards}</div>
+
+      <!-- WORKOUT PLAN TABLE -->
+      <div class="section-header">
+        <span class="section-title">Program Latihan</span>
+        <div class="section-line"></div>
+      </div>
+      <table class="plan-table">
+        <thead>
+          <tr>
+            <th>Gerakan</th>
+            <th>Set</th>
+            <th>Rep / Durasi</th>
+            <th>Istirahat</th>
+            <th>Catatan</th>
+          </tr>
+        </thead>
+        <tbody>${planRows}</tbody>
+      </table>
+    </div>
+  `;
+
+  // Close sidebar on mobile
+  if (window.innerWidth <= 700) {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('overlay').classList.remove('show');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Hamburger menu
+const hamburger = document.getElementById('hamburger');
+const sidebar   = document.getElementById('sidebar');
+const overlay   = document.getElementById('overlay');
+
+hamburger.addEventListener('click', () => {
+  sidebar.classList.toggle('open');
+  overlay.classList.toggle('show');
+});
+
+overlay.addEventListener('click', () => {
+  sidebar.classList.remove('open');
+  overlay.classList.remove('show');
+});
+</script>
+</body>
+</html>
